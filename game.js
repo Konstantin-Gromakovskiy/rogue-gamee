@@ -24,8 +24,7 @@ class Game {
 
   init() {
     this.createMap();
-    // 5-8 комнат, размеры 3-8
-    this.generateRooms(randomInt(5, 8), 3, 8);
+    this.generateRooms(randomInt(5, 10), 3, 8);
     this.connectRooms();
     this.placeItems();
     this.placePlayer();
@@ -57,30 +56,6 @@ class Game {
     for (let i = 0; i < 10; i++) {
       this.placeRandom("tileHP");
     }
-  }
-
-  movePlayer(dx, dy) {
-    const newX = this.player.x + dx;
-    const newY = this.player.y + dy;
-    if (!this.isWalkable(newX, newY)) return;
-    const oldX = this.player.x;
-    const oldY = this.player.y;
-    this.player.x = newX;
-    this.player.y = newY;
-    const tile = this.map[newY][newX];
-    if (tile === "tileHP") {
-      this.player.health = Math.min(
-        this.player.health + 20,
-        this.player.maxHealth
-      );
-    } else if (tile === "tileSW") {
-      this.player.attack += 5;
-      this.player.hasSword = true;
-    }
-    this.map[oldY][oldX] = "empty";
-    this.map[newY][newX] = "tileP";
-    this.renderer.updateTile(oldX, oldY, "tile-empty");
-    this.renderer.updateTile(newX, newY, "tileP");
   }
 
   placeEnemies(count = 10) {
@@ -275,10 +250,10 @@ class Game {
 
   generateRooms(maxRooms = 8, roomMinSize = 3, roomMaxSize = 8) {
     const isOverlapping = (r1, r2) =>
-      r1.x < r2.x + r2.width &&
-      r1.x + r1.width > r2.x &&
-      r1.y < r2.y + r2.height &&
-      r1.y + r1.height > r2.y;
+      r1.x - 1 < r2.x + r2.width &&
+      r1.x + r1.width + 1 > r2.x &&
+      r1.y - 1 < r2.y + r2.height &&
+      r1.y + r1.height + 1 > r2.y;
 
     let attempts = 0;
     while (this.rooms.length < maxRooms && attempts < 200) {
