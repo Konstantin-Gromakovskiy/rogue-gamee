@@ -1,0 +1,84 @@
+* {
+  box-sizing: border-box;
+}
+body,
+html {
+  height: 100%;
+}
+body {
+  background-color: #000000;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+h1 {
+  font-family: "Playfair Display";
+  font-size: 30px;
+  padding: 10px 0;
+  margin: 0;
+}
+.field-box {
+  width: fit-content;
+  height: fit-content;
+  border: 2px solid #d0d0d0;
+  float: left;
+}
+.field {
+  position: relative;
+  width: 1000px;
+  height: 600px;
+}
+.field .tile {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  background-size: 100%;
+  background-image: url("./assets/images/tile-.png");
+  z-index: 5;
+}
+.field .tileW {
+  background-image: url("./assets/images/tile-W.png");
+  z-index: 10;
+}
+.field .tileE {
+  background-image: url("./assets/images/tile-E.png");
+  z-index: 10;
+}
+.field .tileP {
+  background-image: url("./assets/images/tile-P.png");
+  z-index: 10;
+}
+.field .tileHP {
+  background-image: url("./assets/images/tile-HP.png");
+  z-index: 9;
+}
+.field .tileSW {
+  background-image: url("./assets/images/tile-SW.png");
+  z-index: 9;
+}
+.field .tile .health {
+  background-color: #ff0000;
+  z-index: 11;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 3px;
+}
+.field .tileP .health {
+  background-color: #00ff00;
+}
+.inventory-box {
+  border: 2px solid #d0d0d0;
+  float: left;
+}
+.inventory {
+  position: relative;
+  width: 800px;
+  height: 32px;
+}
+.cl {
+  clear: both;
+  display: block;
+}
+
