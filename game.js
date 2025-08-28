@@ -278,34 +278,40 @@ class Game {
       attempts++;
     }
   }
-
-  connectRooms() {
-    for (let i = 1; i < this.rooms.length; i++) {
-      const prev = this.rooms[i - 1];
-      const curr = this.rooms[i];
-      const prevCenter = {
-        x: Math.floor(prev.x + prev.width / 2),
-        y: Math.floor(prev.y + prev.height / 2),
-      };
-      const currCenter = {
-        x: Math.floor(curr.x + curr.width / 2),
-        y: Math.floor(curr.y + curr.height / 2),
-      };
-      if (Math.random() > 0.5) {
-        this.createHTunnel(prevCenter.x, currCenter.x, prevCenter.y);
-        this.createVTunnel(prevCenter.y, currCenter.y, currCenter.x);
-      } else {
-        this.createVTunnel(prevCenter.y, currCenter.y, prevCenter.x);
-        this.createHTunnel(prevCenter.x, currCenter.x, currCenter.y);
-      }
-    }
-  }
-
+  
   createHTunnel(x1, x2, y) {
     for (let x = Math.min(x1, x2); x <= Math.max(x1, x2); x++) {
       this.map[y][x] = "empty";
     }
   }
+
+  connectRooms() {
+    // Создаем 3-5 горизонтальных коридоров
+    const horizontalCorridors = 3 + Math.floor(Math.random() * 3); // 3-5 коридоров
+    // узнаем длину для участка, где поставить коридор
+    const corridorsPeriodY = this.tilesY / horizontalCorridors
+    
+    for (let i = 0; i < horizontalCorridors; i++) {
+      // Выбираем случайную координату Y для коридора при том на каждом из равномерных участков для каждого коридора
+      const y = Math.floor(Math.random() * (corridorsPeriodY) + corridorsPeriodY * i)
+      // Создаем коридор через всю ширину карты
+      this.createHTunnel(0, this.tilesX - 1, y);
+    }
+
+    // Создаем 3-5 вертикальных коридоров
+    const verticalCorridors = 3 + Math.floor(Math.random() * 3); // 3-5 коридоров
+    // узнаем длину для участка, где поставить коридор
+    const corridorsPeriodX = this.tilesX / verticalCorridors
+    
+    for (let i = 0; i < verticalCorridors; i++) {
+      // Выбираем случайную координату Y для коридора при том на каждом из равномерных участков для каждого коридора
+      const x = Math.floor(Math.random() * (corridorsPeriodX) + corridorsPeriodX * i)
+      // Создаем коридор через всю высоту карты
+      this.createVTunnel(0, this.tilesY - 1, x);
+    }
+  }
+
+
 
   createVTunnel(y1, y2, x) {
     for (let y = Math.min(y1, y2); y <= Math.max(y1, y2); y++) {
