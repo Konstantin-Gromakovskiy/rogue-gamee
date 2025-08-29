@@ -24,8 +24,8 @@ class Game {
 
   init() {
     this.createMap();
-    this.generateRooms(randomInt(5, 10), 3, 8);
     this.connectRooms();
+    this.generateRooms(randomInt(5, 10), 3, 8);
     this.placeItems();
     this.placePlayer();
     this.renderer.renderMap(this.map);
@@ -255,23 +255,39 @@ class Game {
       r1.y - 1 < r2.y + r2.height &&
       r1.y + r1.height + 1 > r2.y;
 
+    // Функция проверяет, пересекается ли комната с существующим коридором
+    const isTouchingCorridor = (room) => {
+      // Проверяем границы комнаты и одну клетку вокруг
+      for (let y = room.y - 1; y < room.y + room.height + 1; y++) {
+        for (let x = room.x - 1; x < room.x + room.width + 1; x++) {
+          if (y >= 0 && y < this.tilesY && x >= 0 && x < this.tilesX) {
+            if (this.map[y][x] === "empty" &&
+                (x === room.x - 1 || x === room.x + room.width ||
+                 y === room.y - 1 || y === room.y + room.height)) {
+              return true;
+            }
+          }
+        }
+      }
+      return false;
+    };
+
     let attempts = 0;
     while (this.rooms.length < maxRooms && attempts < 200) {
-      const width =
-        roomMinSize +
-        Math.floor(Math.random() * (roomMaxSize - roomMinSize + 1));
-      const height =
-        roomMinSize +
-        Math.floor(Math.random() * (roomMaxSize - roomMinSize + 1));
+      const width = roomMinSize + Math.floor(Math.random() * (roomMaxSize - roomMinSize + 1));
+      const height = roomMinSize + Math.floor(Math.random() * (roomMaxSize - roomMinSize + 1));
       const x = 1 + Math.floor(Math.random() * (this.tilesX - width - 2));
       const y = 1 + Math.floor(Math.random() * (this.tilesY - height - 2));
       const newRoom = { x, y, width, height };
 
-      if (!this.rooms.some((r) => isOverlapping(r, newRoom))) {
-        this.rooms.push(newRoom);
-        for (let i = y; i < y + height; i++) {
-          for (let j = x; j < x + width; j++) {
-            this.map[i][j] = "empty";
+      // Если это первая комната или комната примыкает к коридору
+      if (this.rooms.length === 0 || isTouchingCorridor(newRoom)) {
+        if (!this.rooms.some(r => isOverlapping(r, newRoom))) {
+          this.rooms.push(newRoom);
+          for (let i = y; i < y + height; i++) {
+            for (let j = x; j < x + width; j++) {
+              this.map[i][j] = "empty";
+            }
           }
         }
       }
