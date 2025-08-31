@@ -24,7 +24,7 @@ class Game {
 
   init() {
     this.createMap()
-    this.connectRooms()
+    this.createTunnels()
     this.generateRooms(randomInt(5, 10), 3, 8)
     this.placeItems()
     this.placePlayer()
@@ -84,11 +84,6 @@ class Game {
 
       // Если по обоим осям уже на месте (враг на игроке) — атакуем
       let hasAttacked = false
-      if (enemy.x === this.player.x && enemy.y === this.player.y) {
-        this.attackPlayer()
-        hasAttacked = true
-        return
-      }
 
       let moved = false
       for (const [dx, dy] of tryMoves) {
@@ -261,7 +256,7 @@ class Game {
     }
   }
 
-  connectRooms() {
+  createTunnels() {
     // Создаем 3-5 горизонтальных коридоров
     const horizontalCorridors = 3 + Math.floor(Math.random() * 3) // 3-5 коридоров
     // узнаем длину для участка, где поставить коридор
